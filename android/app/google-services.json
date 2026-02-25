@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "103767202646",
+    "project_id": "xchange-fbe78",
+    "storage_bucket": "xchange-fbe78.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:103767202646:android:8b9e7cedb4e375d6d294f7",
+        "android_client_info": {
+          "package_name": "com.example.xchange"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "103767202646-r0umd7ejr06qijnbarm8rpc9kahcslhs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD5czo4nUf3_4T9VhtCZenalbHofW8Quq4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "103767202646-r0umd7ejr06qijnbarm8rpc9kahcslhs.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "103767202646-j102p981r01kna41fsdqhc48g89pcnh9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.xchange"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
