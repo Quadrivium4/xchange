@@ -16,7 +16,7 @@ GoRouter appRouter(AuthProvider authProvider) => GoRouter(
   redirect: (context, state) {
     final logged = getLogged();
     if(!logged){
-      return "/login";
+      return "/register"; // Qui c'era "/login", mi pare di capire che il router fosse da finire, ho messo register per poter fare l'altra pagina
     }
     return state.matchedLocation;
   },

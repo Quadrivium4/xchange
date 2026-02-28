@@ -7,10 +7,12 @@ const double offWidth = 2;
 
 class LoginTextBox extends StatefulWidget {
   final TextEditingController controller;
-  final Icon icon;
-  final String label;
+  final Icon? icon;
+  final String? label;
+  final String? hint;
   final bool? hideText;
-  const LoginTextBox({super.key, required this.controller, required this.icon, required this.label, this.hideText});
+  final String? title; //Text widget before the TextField
+  const LoginTextBox({super.key, required this.controller, this.icon, this.label, this.hint ,this.hideText, this.title});
 
   @override
   State<LoginTextBox> createState() => _LoginTextBoxState();
@@ -19,48 +21,57 @@ class LoginTextBox extends StatefulWidget {
 class _LoginTextBoxState extends State<LoginTextBox> {
 
   final FocusNode focusNode = FocusNode();
-  bool toggled = false;
 
    @override
    void initState() {
     super.initState();
     focusNode.addListener(() {
-      if(focusNode.hasFocus != toggled){
-        setState(() {
-          toggled = !toggled;
-        });
-      }
+      setState(() {});
     });
   }
 
+  @override
+  void dispose() {
+    focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
 
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: toggled ? onColor : offColor,
-          width: toggled ? onWidth : offWidth,
-      )
-      ),
+        widget.title != null ? Text(widget.title!) : SizedBox.shrink(),
 
-      child: Padding(
-        padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
-        child: TextField(
+        Container(
 
-          focusNode: focusNode,
-          controller: widget.controller,
-          obscureText: widget.hideText ?? false,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(
+              color: focusNode.hasFocus ? onColor : offColor,
+              width: focusNode.hasFocus ? onWidth : offWidth,
+          )
+          ),
 
-          decoration: InputDecoration(
-            icon: widget.icon,
-            border: InputBorder.none,
-            labelText: widget.label,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(8, 0, 0, 0),
+            child: TextField(
+
+              focusNode: focusNode,
+              controller: widget.controller,
+              obscureText: widget.hideText ?? false,
+
+              decoration: InputDecoration(
+                icon: widget.icon,
+                border: InputBorder.none,
+                labelText: widget.label,
+                hint: widget.hint == null ? null : Text(widget.hint!),
+              ),
+            ),
           ),
         ),
-      ),
+      ],
     );
   }
 }

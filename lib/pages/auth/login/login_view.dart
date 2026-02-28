@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:xchange/widgets/Buttons/confirmationButton.dart';
 import 'package:xchange/widgets/loginTextBox.dart';
-import 'package:xchange/widgets/spacedColumn.dart';
+import 'package:xchange/widgets/Structure/spacedColumn.dart';
 
 
 class LoginView extends StatefulWidget{
@@ -21,7 +23,8 @@ class _LoginViewState extends State<LoginView> {
       child: Padding(
         padding: EdgeInsets.all(30),
         child: SpacedColumn(
-          spacing: 8,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
 
             Text("XChange",),
@@ -30,18 +33,10 @@ class _LoginViewState extends State<LoginView> {
             LoginTextBox(controller: emailCtrl, icon: Icon(Icons.email_outlined), label: "Email"),
             LoginTextBox(controller: pswCtrl, icon: Icon(Icons.lock_outlined), label: "password", hideText: true,),
 
-            ElevatedButton(
-                onPressed: (){/*To be filled with the login function*/},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.orange,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("Login", style: TextStyle(color: Colors.white,),),
-                  Icon(Icons.arrow_forward, color: Colors.white,),
-                ],
-              ),
+            ConfirmationButton(
+                onPressed: (){},
+                text: "Login",
+                icon: Icons.arrow_forward,
             ),
 
             Row(
@@ -49,7 +44,7 @@ class _LoginViewState extends State<LoginView> {
               children: [
                 Text("You don't have an account?"),
                 TextButton(
-                  onPressed: (){/*To implement the function*/},
+                  onPressed: (){context.go("/register");},
                   child: Text("Register", style: TextStyle(color: Colors.orange),),
                 ),
               ],
