@@ -32,12 +32,13 @@ class AuthController {
 
   Stream<User?> get authStateChanges => _auth.authStateChanges();
   Future<void> signInEmailPassword(TLoginCredentials credentials) async {
-    await _wait();
+
     try {
       await _auth.signInWithEmailAndPassword(
         email: credentials.email,
         password: credentials.password,
       );
+      print("successfully logged");
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case "invalid-email":

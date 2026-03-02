@@ -24,13 +24,15 @@ class _AppScaffoldState extends State<AppScaffold>{
       body: widget.navigationShell,
        bottomNavigationBar: BottomNavigationBar(
           onTap: (int index) {
+            print("Index: $index");
+            widget.navigationShell.goBranch(index);
             setState(() {
               pageIndex = index;
             });
           },
           currentIndex: pageIndex,
           items: [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: "home"),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "home ${pageIndex}"),
           BottomNavigationBarItem(icon: Icon(Icons.settings), label: "settings")
         ]),
     );

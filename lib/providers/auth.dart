@@ -4,7 +4,7 @@ import 'package:xchange/controllers/auth.dart';
 import 'package:xchange/controllers/user.dart';
 
 class AuthProvider extends ChangeNotifier {
-   String? uid;
+  String? uid;
   UserModel? user;
   bool loading = true;
   bool logged = false;
@@ -25,10 +25,12 @@ class AuthProvider extends ChangeNotifier {
     //   //login();
     // }
     authController.authStateChanges.listen((user) {
-      //print("auth state changed: ${user}");
+      print("auth state changed: ${user}");
       if (user != null) {
+
         logged = true;
         loading = false;
+        print("logged: $logged");
         notifyListeners();
       }
       if (user != null && uid == null) {
@@ -62,5 +64,14 @@ class AuthProvider extends ChangeNotifier {
         );
        
     
+  }
+  signOut() async {
+    await authController.signOut();
+    logged = false;
+    notifyListeners();
+    //await authController.signOut();
+  }
+  AuthProvider(){
+    initState();
   }
 }

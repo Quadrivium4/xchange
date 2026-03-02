@@ -1,24 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:xchange/pages/auth/login/login_view_model.dart';
 import 'package:xchange/widgets/Buttons/confirmationButton.dart';
 import 'package:xchange/widgets/loginTextBox.dart';
 import 'package:xchange/widgets/Structure/spacedColumn.dart';
 
 
-class LoginView extends StatefulWidget{
+class LoginView extends StatelessWidget{
   const LoginView({super.key});
 
-  @override
-  State<LoginView> createState() => _LoginViewState();
-}
-
-class _LoginViewState extends State<LoginView> {
-
-  final TextEditingController emailCtrl = TextEditingController();
-  final TextEditingController pswCtrl = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = context.watch<LoginViewModel>();
     return Center(
       child: Padding(
         padding: EdgeInsets.all(30),
@@ -30,11 +25,13 @@ class _LoginViewState extends State<LoginView> {
             Text("XChange",),
             Text("Access your account"),
 
-            LoginTextBox(controller: emailCtrl, icon: Icon(Icons.email_outlined), label: "Email"),
-            LoginTextBox(controller: pswCtrl, icon: Icon(Icons.lock_outlined), label: "password", hideText: true,),
+            LoginTextBox(controller: viewModel.email, icon: Icon(Icons.email_outlined), label: "Email"),
+            LoginTextBox(controller: viewModel.password, icon: Icon(Icons.lock_outlined), label: "password", hideText: true,),
 
             ConfirmationButton(
-                onPressed: (){},
+                onPressed: (){
+                  viewModel.handleLogin(context);
+                },
                 text: "Login",
                 icon: Icons.arrow_forward,
             ),
@@ -44,7 +41,9 @@ class _LoginViewState extends State<LoginView> {
               children: [
                 Text("You don't have an account?"),
                 TextButton(
-                  onPressed: (){context.go("/register");},
+                  onPressed: (){
+                    context.go("/register");
+                  },
                   child: Text("Register", style: TextStyle(color: Colors.orange),),
                 ),
               ],
