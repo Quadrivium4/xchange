@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:xchange/pages/app/onboarding/onboarding_view_model.dart';
+import 'package:xchange/providers/auth.dart';
+import 'package:xchange/providers/user.dart';
 import 'package:xchange/widgets/Buttons/customBackButton.dart';
 import 'package:xchange/widgets/Buttons/confirmationButton.dart';
 import 'package:xchange/widgets/loginTextBox.dart';
@@ -16,17 +20,14 @@ class OnboardingView extends StatefulWidget{
 
 class _OnboardingViewState extends State<OnboardingView> {
 
-  final TextEditingController nameCtrl = TextEditingController();
-  final TextEditingController ageCtrl = TextEditingController();
-  final TextEditingController nationalityCtrl = TextEditingController();
-
-  final TextEditingController uniCtrl = TextEditingController();
-  final TextEditingController destinationCtrl = TextEditingController();
 
   final ProfileCreationStage creationStage = ProfileCreationStage();
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = context.watch<OnboardingViewModel>();
+    final userProv = context.read<UserProvider>();
+    final authProv = context.read<AuthProvider>();
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: (){
@@ -53,19 +54,19 @@ class _OnboardingViewState extends State<OnboardingView> {
 
                   LoginTextBox(
                     title: "Name",
-                    controller: nameCtrl,
+                    controller: viewModel.nameCtrl,
                     hint: "Your name",
                   ),
 
                   LoginTextBox(
                     title: "Age",
-                    controller: ageCtrl,
+                    controller: viewModel.ageCtrl,
                     hint: "e.g. 21",
                   ),
 
                   LoginTextBox(
                     title: "Nationality",
-                    controller: nationalityCtrl,
+                    controller: viewModel.nationalityCtrl,
                     hint: "e.g. Italy, France, Netherlands...",
                   ),
                 ],
@@ -75,13 +76,13 @@ class _OnboardingViewState extends State<OnboardingView> {
                 children: [
                   LoginTextBox(
                     title: "Home university",
-                    controller: uniCtrl,
+                    controller: viewModel.uniCtrl,
                     hint: "e.g. Sorbonne, Sapienza, TU Delft...",
                   ),
 
                   LoginTextBox(
                     title: "Where are you going in Erasmus?",
-                    controller: destinationCtrl,
+                    controller: viewModel.destinationCtrl,
                     hint: "E.g. Barcelona, Milano, Berlin...",
                   ),
                 ]
@@ -108,8 +109,8 @@ class _OnboardingViewState extends State<OnboardingView> {
                   ConfirmationButton(
                       onPressed: (){setState(() {
                         if(creationStage.stage == Stage.interests){
-                          context.go("/");
-                        }else{
+                          authProv.setOnboarded(true);
+                        }else{  
                           creationStage.nextStage();
                         }
                         

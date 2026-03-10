@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class UserModel {
   String name;
   String email;
-
+  bool onboarded;
   String uid;
 
 
@@ -13,6 +13,7 @@ class UserModel {
     required this.name,
     required this.email,
     required this.uid,
+    required this.onboarded,
 
   }) ;
 
@@ -22,8 +23,28 @@ class UserModel {
     return UserModel(
       name: data?['name'] ?? "",
       email: data?['email'] ?? "",
+      onboarded: data?['onboarded'] ?? false,
       uid: snap.id,
     );
+  }
+  copyWith({
+    String? name,
+    String? email,
+    bool? onboarded,
+  }) {
+    return UserModel(
+      name: name ?? this.name,
+      email: email ?? this.email,
+      onboarded: onboarded ?? this.onboarded,
+      uid: uid,
+    );
+  }
+  toJson(){
+    return {
+      'name': name,
+      'email': email,
+      'onboarded': onboarded,
+    };
   }
 }
 
@@ -46,19 +67,19 @@ class UserController {
        await _db.collection("users").doc(uid).set({
         'name': name ?? "",
         'email': email ?? "",
-
+        'onboarded': false,
       });
       
     }
   }
 
-  Future<dynamic> getUser(String uid) async {
+  Future<UserModel> getUser(String uid) async {
     try {
       //print("getting user: $uid");
       //await _wait();
       final data = await _db.collection("users").doc(uid).get();
       //print("getted user snapshot: ${data.data()}");
-      return data;
+      return UserModel.fromDocument(data);
     } catch (err) {
       print("ERROR found");
       rethrow;
@@ -66,21 +87,19 @@ class UserController {
   }
 
   Future<dynamic> updateUser(UserModel newUser) async {
-
-    _db.collection("users").doc(newUser.uid).update({
-      "name": newUser.name,
-    });
+    await _db.collection("users").doc(newUser.uid).update(newUser.toJson());
   }
 
 
 
   StreamSubscription<DocumentSnapshot<Map<String, dynamic>>> onChange(
-    Function(TFirestoreResonse) callback,
+    Function(UserModel) callback,
     String uid,
   ) {
     //print("auth uid: $uid");
     return _db.collection("users").doc(uid).snapshots().listen((snap) {
-      callback(snap);
+      final user = UserModel.fromDocument(snap);
+      callback(user);
     });
   }
 

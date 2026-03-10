@@ -19,7 +19,7 @@ class _AppScaffoldState extends State<AppScaffold>{
   }
   @override
   Widget build(BuildContext context) {
-
+    
     return Scaffold(
       body: widget.navigationShell,
        bottomNavigationBar: BottomNavigationBar(

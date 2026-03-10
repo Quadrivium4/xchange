@@ -24,24 +24,46 @@ class AuthProvider extends ChangeNotifier {
     //   loading = false;
     //   //login();
     // }
-    authController.authStateChanges.listen((user) {
-      print("auth state changed: ${user}");
-      if (user != null) {
+    authController.authStateChanges.listen((authUser) async {
+      print("auth state changed: ${authUser}");
+      if(authUser == null){
+        logged = false;
+        loading = false;
+        notifyListeners();
+        return;
+      }else{
+        print("logging in user with uid: ${authUser.uid}");
+        try {
+          user = await userController.getUser(authUser.uid);
+          logged = true;
+          loading = false;
+          notifyListeners();
+        } catch (e) {
+           print("error getting user data: $e");
+          logged = false;
+          loading = false;
+          notifyListeners();
+        }
+      }
 
-        logged = true;
-        loading = false;
-        print("logged: $logged");
-        notifyListeners();
-      }
-      if (user != null && uid == null) {
-        uid = user.uid;
-        loading = false;
-        notifyListeners();
-      } else if (user == null && uid != null) {
-        uid = null;
-        loading = false;
-        notifyListeners();
-      }
+      
+      // print("auth state changed: ${user}");
+      // if (user != null) {
+
+      //   logged = true;
+      //   loading = false;
+      //   print("logged: $logged");
+      //   notifyListeners();
+      // }
+      // if (user != null && uid == null) {
+      //   uid = user.uid;
+      //   loading = false;
+      //   notifyListeners();
+      // } else if (user == null && uid != null) {
+      //   uid = null;
+      //   loading = false;
+      //   notifyListeners();
+      // }
     });
   }
 
@@ -69,7 +91,13 @@ class AuthProvider extends ChangeNotifier {
     await authController.signOut();
     logged = false;
     notifyListeners();
-    //await authController.signOut();
+  }
+  setOnboarded(bool onboarded) async {
+    if(user == null) return;
+    final updatedUser = user!.copyWith(onboarded: onboarded);
+    await userController.updateUser(updatedUser);
+    user = updatedUser;
+    notifyListeners();
   }
   AuthProvider(){
     initState();

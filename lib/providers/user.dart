@@ -1,22 +1,25 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:xchange/controllers/user.dart';
 
 class UserProvider extends ChangeNotifier {
   UserModel user;
-  String uid;
   StreamSubscription<DocumentSnapshot<Map<String, dynamic>>>? _subscription;
   UserController userController = UserController();
 
   //UserProvider({required this.user});
-
-  initState() async {
-    user = await userController.getUser(uid);
+  initState(){
+   _subscription =  userController.onChange((newUser){
+    user = newUser;
+    notifyListeners();
+   }, user.uid);
   }
-
-
+  editUser(UserModel newUser) {
+    userController.updateUser(newUser);
+  }
   @override
   void dispose() {
     print("disposing user provider...");
@@ -24,7 +27,7 @@ class UserProvider extends ChangeNotifier {
     super.dispose();
   }
 
-  UserProvider({required this.uid, required this.user}) {
+  UserProvider({required this.user}) {
     initState();
   }
 }
